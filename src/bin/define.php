@@ -11,7 +11,7 @@ define('MYROOT',BIN_DIR."/..");
 
 require_once MYROOT . '/vendor/autoload.php';
 
-checkfile("SERVER_DIR", MYROOT."/vendor/tmtbe/swooledistributed/src/Server");
+checkfile("SERVER_DIR", MYROOT."/vendor/weijer/sd_consul/src/Server");
 checkfile("APP_DIR", MYROOT . "/src/app");
 checkfile("WWW_DIR", MYROOT . "/src/www");
 checkfile("LUA_DIR", MYROOT . "/src/lua");
