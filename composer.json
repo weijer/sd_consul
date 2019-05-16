@@ -1,6 +1,8 @@
 {
   "require": {
     "php": ">=7.1.6",
+    "ext-json": "*",
+    "ext-openssl": "*",
     "monolog/monolog": "@stable",
     "hassankhan/config": "@stable",
     "voku/anti-xss": "@stable",

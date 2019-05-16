@@ -185,17 +185,19 @@ function isDarwin()
         return false;
     }
 }
+
 function displayExceptionHandler(\Throwable $exception)
 {
-    get_instance()->log->error($exception->getMessage(),["trace"=>$exception->getTrace()]);
-    secho("EX","------------------发生异常：".$exception->getMessage()."-----------------------");
+    get_instance()->log->error($exception->getMessage(), ["trace" => $exception->getTrace()]);
+    secho("EX", "------------------发生异常：" . $exception->getMessage() . "-----------------------");
     $string = $exception->getTraceAsString();
-    $arr = explode("#",$string);
+    $arr = explode("#", $string);
     unset($arr[0]);
-    foreach ($arr as $value){
-        secho("EX","#".$value);
+    foreach ($arr as $value) {
+        secho("EX", "#" . $value);
     }
 }
+
 /**
  * 代替sleep
  * @param $ms
@@ -353,7 +355,7 @@ function format_date($time)
 
 function sd_call_user_func($function, ...$parameter)
 {
-    if(is_callable($function)){
+    if (is_callable($function)) {
         return $function(...$parameter);
     }
 }
@@ -374,11 +376,31 @@ function sd_debug($arr)
     Server\Components\SDDebug\SDDebug::debug($arr);
 }
 
+
+/**
+ * echo替代方案
+ * @param $array
+ * @return array|bool
+ */
+function fun_adm_each(&$array){
+    $res = array();
+    $key = key($array);
+    if($key !== null){
+        next($array);
+        $res[1] = $res['value'] = $array[$key];
+        $res[0] = $res['key'] = $key;
+    }else{
+        $res = false;
+    }
+    return $res;
+}
+
+
 function read_dir_queue($dir)
 {
     $files = array();
     $queue = array($dir);
-    while ($data = each($queue)) {
+    while ($data = fun_adm_each($queue)) {
         $path = $data['value'];
         if (is_dir($path) && $handle = opendir($path)) {
             while ($file = readdir($handle)) {
@@ -396,4 +418,166 @@ function read_dir_queue($dir)
         }
     }
     return $result;
+}
+
+if (!function_exists('encode_aes')) {
+    /**
+     * @param $data mixed 需要加密的数据(除资源类型外的所有类型)
+     * @param $publicKey  string 公钥
+     * @param bool $serialize 是否序列化(除Str外的都需序列化,如果是String可不序列化,节省时间)
+     *      https://wiki.swoole.com/wiki/page/p-serialize.html
+     * @param string $method
+     * @return array
+     */
+    function encode_aes($data, $publicKey, $serialize = false, $method = 'aes-256-cbc')
+    {
+        if ($serialize) $data = serialize($data);
+        $key = password_hash($publicKey, PASSWORD_BCRYPT, ['cost' => 12]);
+        $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+        secho('data', $data);
+        $encrypted = base64_encode(openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA, $iv));
+        return [
+            'hash_key' => $key,
+            'encrypted' => $encrypted,
+        ];
+    }
+}
+
+if (!function_exists('decode_aes')) {
+    /**
+     * @param $data
+     * @param $key
+     * @param bool $serialize
+     * @param string $method
+     * @return mixed|string
+     */
+    function decode_aes($data, $key, $serialize = false, $method = 'aes-256-cbc')
+    {
+        $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+        $decrypted = openssl_decrypt(base64_decode($data), $method, $key, OPENSSL_RAW_DATA, $iv);
+        if ($serialize) $decrypted = unserialize($decrypted);
+        return $decrypted;
+    }
+}
+
+if (!function_exists('generate_response_data')) {
+    /**
+     * 生成返回数据
+     * @param int $code
+     * @param string $msg
+     * @param string $type
+     * @param array $data
+     * @return array
+     */
+    function generate_response_data($code = -1, $msg = '', $data = [], $type = '')
+    {
+        $responseData = [
+            'code' => $code,
+            'msg' => $msg
+        ];
+
+        if (!empty($type)) {
+            // 增加类型
+            $responseData['type'] = $type;
+        }
+
+        if (!empty($data)) {
+            // 增加返回数据
+            $responseData['data'] = $data;
+        }
+
+        return $responseData;
+    }
+}
+
+if (!function_exists('throw_api_exception')) {
+    /**
+     * @param int $code
+     * @param string $msg
+     * @param string $type
+     * @throws Exception
+     */
+    function throw_api_exception($code = -1, $msg = '', $type = '')
+    {
+        $errorData = generate_response_data($code, $msg, [], $type);
+
+        throw new \Exception(json_encode($errorData));
+    }
+}
+
+if (!function_exists('string_random')) {
+    /**
+     * 随机字符串加数字
+     * @param $length
+     * @return string
+     * @throws Exception
+     */
+    function string_random($length)
+    {
+        $int = $length / 2;
+        $bytes = random_bytes($int);
+        $string = bin2hex($bytes);
+        return $string;
+    }
+}
+
+if (!function_exists('create_directory')) {
+    /**
+     * 判断目录是否存在,不存在则创建
+     * @param $path
+     * @param int $mode
+     * @return bool|string
+     */
+    function create_directory($path, $mode = 0777)
+    {
+        if (is_dir($path)) {
+            //判断目录存在否，存在不创建
+            return true;
+        } else {
+            //不存在则创建目录
+            $re = mkdir($path, $mode, true);
+            if ($re) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
+if (!function_exists('validate_param')) {
+    /**
+     * 验证参数
+     * @param $obj
+     * @param $model
+     * @param $scene
+     * @param $data
+     * @throws Exception
+     */
+    function validate_param($model, $scene, $data)
+    {
+        $className = "\\app\Validate\\{$model}";
+        $validate = new $className();
+        $check = $validate->scene($scene)->check($data);
+
+        if (!$check) {
+            throw_api_exception(-40001, $validate->getError());
+        };
+    }
+}
+
+if (!function_exists('is_many_dimension_array')) {
+    /**
+     * 是否是多维数组
+     * @param $array
+     * @return bool
+     */
+    function is_many_dimension_array($array)
+    {
+        if (count($array) == count($array, 1)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
