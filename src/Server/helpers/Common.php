@@ -581,3 +581,16 @@ if (!function_exists('is_many_dimension_array')) {
         }
     }
 }
+
+if (!function_exists('object_to_array')) {
+    /**
+     * 对象转数组
+     * @param $object
+     * @return mixed
+     */
+    function object_to_array(&$object)
+    {
+        $object = json_decode(json_encode($object), true);
+        return $object;
+    }
+}
