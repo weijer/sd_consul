@@ -615,4 +615,12 @@ class Controller extends CoreBase
     {
         $this->isEnd = true;
     }
+
+    /*
+     * RPC请求通用返回接口
+     */
+    protected function RPCResponse($data, $code = 0, $msg = ''){
+        $resData = generate_response_data($code, $msg, $data);
+        $this->send($resData);
+    }
 }

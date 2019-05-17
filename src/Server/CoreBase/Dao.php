@@ -795,7 +795,8 @@ class Dao extends Model
      */
     public function delete(array $filter)
     {
-        $this->db->delete($this->table);
+        $this->db->delete();
+        $this->db->from($this->table);
 
         $this->assemblyFilter($filter);
 
