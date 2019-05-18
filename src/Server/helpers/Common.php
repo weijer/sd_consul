@@ -481,10 +481,10 @@ if (!function_exists('generate_response_data')) {
             $responseData['type'] = $type;
         }
 
-        if (!empty($data)) {
+        //if (!empty($data)) {
             // 增加返回数据
             $responseData['data'] = $data;
-        }
+       // }
 
         return $responseData;
     }
