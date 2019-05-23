@@ -367,9 +367,12 @@ class Dao extends Model
                 $value = null;
             }
             if (!in_array($field, $this->change)) {
-                $res = $this->setAttr($field, !is_null($value) ? $value : (isset($this->data[$field]) ? $this->data[$field] : $value));
+                $this->setAttr($field, !is_null($value) ? $value : (isset($this->data[$field]) ? $this->data[$field] : $value));
             }
         }
+
+        //  清除change缓存
+        $this->change = [];
     }
 
     /**
