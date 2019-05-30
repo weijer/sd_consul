@@ -41,6 +41,6 @@ class KillCmd extends Command
         }
 
         exec("ps -ef|grep $server_name|grep -v grep|cut -c 9-15|xargs kill -9");
-        exec("ps -ef|grep consul|grep -v grep|cut -c 9-15|xargs kill -9");
+        //exec("ps -ef|grep consul|grep -v grep|cut -c 9-15|xargs kill -9");
     }
 }
