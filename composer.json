@@ -3,15 +3,15 @@
     "php": ">=7.1.6",
     "ext-json": "*",
     "ext-openssl": "*",
-    "monolog/monolog": "@stable",
-    "hassankhan/config": "@stable",
-    "voku/anti-xss": "@stable",
-    "illuminate/view": "^5.1",
-    "filp/whoops": "@stable",
-    "graylog2/gelf-php": "@stable",
-    "php-amqplib/php-amqplib": "@stable",
-    "php-ds/php-ds": "@stable",
-    "symfony/console": "@stable"
+    "monolog/monolog": "1.*",
+    "hassankhan/config": "2.*",
+    "voku/anti-xss": "4.1.*",
+    "illuminate/view": "v5.8.*",
+    "filp/whoops": "2.3.*",
+    "graylog2/gelf-php": "1.6.*",
+    "php-amqplib/php-amqplib": "v2.9.*",
+    "php-ds/php-ds": "v1.2.*",
+    "symfony/console": "v4.3.*"
   },
   "autoload": {
     "psr-4": {
