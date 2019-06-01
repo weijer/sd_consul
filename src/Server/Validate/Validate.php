@@ -1013,7 +1013,8 @@ class Validate extends CoreBase
         }
 
         // 查询
-        $this->db->from($rule[0]);
+        $this->db->from($rule[0])
+            ->select('id');
 
         $key = $rule[1] ?? $field;
         if (strpos($key, '^')) {
