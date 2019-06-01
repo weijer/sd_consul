@@ -4,7 +4,7 @@
     "ext-json": "*",
     "ext-openssl": "*",
     "monolog/monolog": "1.*",
-    "hassankhan/config": "2.*",
+    "hassankhan/config": "1.1.0",
     "voku/anti-xss": "4.1.*",
     "illuminate/view": "v5.8.*",
     "filp/whoops": "2.3.*",
