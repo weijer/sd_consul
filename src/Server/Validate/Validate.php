@@ -185,33 +185,16 @@ class Validate extends CoreBase
     public $db;
 
     /**
-     * Validate constructor.
-     * @param string $proxy
-     */
-    public function __construct($proxy = ChildProxy::class)
-    {
-        parent::__construct($proxy);
-    }
-
-    /**
-     * 当被loader时会调用这个方法进行初始化
-     * @param $context
-     */
-    public function initialization(&$context)
-    {
-        $this->setContext($context);
-        $this->db = $this->loader->mysql("mysqlPool", $this);
-    }
-
-    /**
      * 架构函数
-     * @access public
      * @param array $rules 验证规则
      * @param array $message 验证提示信息
      * @param array $field 验证字段描述信息
+     * @param string $proxy
      */
-    public function init(array $rules = [], $message = [], $field = [])
+    public function __construct(array $rules = [], $message = [], $field = [], $proxy = ChildProxy::class)
     {
+        parent::__construct($proxy);
+        $this->db = $this->loader->mysql("mysqlPool", $this);
         $this->rule = $rules + $this->rule;
         $this->message = array_merge($this->message, $message);
         $this->field = array_merge($this->field, $field);
@@ -1487,13 +1470,5 @@ class Validate extends CoreBase
         array_push($args, lcfirst($method));
 
         return call_user_func_array([$this, 'is'], $args);
-    }
-
-    /**
-     * 销毁回归对象池
-     */
-    public function destroy()
-    {
-        parent::destroy();
     }
 }
