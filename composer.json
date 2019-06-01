@@ -9,7 +9,7 @@
     "illuminate/view": "v5.8.*",
     "filp/whoops": "2.3.*",
     "graylog2/gelf-php": "1.6.*",
-    "php-amqplib/php-amqplib": "v2.9.*",
+    "php-amqplib/php-amqplib": "v2.8.*",
     "php-ds/php-ds": "v1.2.*",
     "symfony/console": "v4.2.*"
   },
