@@ -746,7 +746,9 @@ class Dao extends Model
             ->query();
 
         if ($resData->affected_rows() > 0) {
-            return $resData->getResult();
+            $resultAddData = $resData->getResult();
+            $this->data['id'] = $resultAddData['insert_id'];
+            return $this->data;
         } else {
             $this->throwDaoError(-41006, 'create failure.');
         }
