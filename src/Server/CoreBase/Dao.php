@@ -747,8 +747,8 @@ class Dao extends Model
 
         if ($resData->affected_rows() > 0) {
             $resultAddData = $resData->getResult();
-            $this->data['id'] = $resultAddData['insert_id'];
-            return $this->data;
+            $newData = $this->find('', ['id' => ['=', $resultAddData['insert_id']]]);
+            return $this->handleReturnData($newData);
         } else {
             $this->throwDaoError(-41006, 'create failure.');
         }

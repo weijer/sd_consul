@@ -382,14 +382,15 @@ function sd_debug($arr)
  * @param $array
  * @return array|bool
  */
-function fun_adm_each(&$array){
+function fun_adm_each(&$array)
+{
     $res = array();
     $key = key($array);
-    if($key !== null){
+    if ($key !== null) {
         next($array);
         $res[1] = $res['value'] = $array[$key];
         $res[0] = $res['key'] = $key;
-    }else{
+    } else {
         $res = false;
     }
     return $res;
@@ -481,10 +482,10 @@ if (!function_exists('generate_response_data')) {
             $responseData['type'] = $type;
         }
 
-        if (!empty($data)) {
-            // 增加返回数据
-            $responseData['data'] = $data;
-        }
+        //if (!empty($data)) {
+        // 增加返回数据
+        $responseData['data'] = $data;
+        // }
 
         return $responseData;
     }
@@ -592,5 +593,44 @@ if (!function_exists('object_to_array')) {
     {
         $object = json_decode(json_encode($object), true);
         return $object;
+    }
+}
+
+
+if (!function_exists('get_format_date')) {
+    /**
+     * string格式化用户使用语言
+     * @param $time
+     * @param int $type
+     * @param bool $isGantt
+     * @return false|string
+     */
+    function get_format_date($time, $type = 0, $isGantt = false)
+    {
+        if (!empty($time) && is_numeric($time)) {
+            $inter = 8;
+            $timestamp = $time + (3600 * $inter);
+
+            switch ($type) {
+                case 0:
+                    if ($isGantt) {
+                        $date = gmdate("d-m-Y", $timestamp);
+                    } else {
+                        $date = gmdate("Y-m-d", $timestamp);
+                    }
+                    break;
+                case 2:
+                    $date = gmdate("Y-m-d H:i", $timestamp);
+                    break;
+                case 1:
+                default:
+                    $date = gmdate("Y-m-d H:i:s", $timestamp);
+                    break;
+            }
+
+            return $date;
+        } else {
+            return '';
+        }
     }
 }
