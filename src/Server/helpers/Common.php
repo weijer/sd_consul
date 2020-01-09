@@ -596,6 +596,24 @@ if (!function_exists('object_to_array')) {
     }
 }
 
+if (!function_exists('unique_arr')) {
+    /*
+     * 去除数组重复
+     */
+    function unique_arr($filterData)
+    {
+        $filterData = array_flip(array_flip($filterData));
+        $newFilterData = array();
+        foreach ($filterData as $k => $v) {
+            if ($v == '') {
+                unset($filterData[$k]);
+            }
+            $newFilterData[] = $filterData[$k];
+        }
+        return $newFilterData;
+    }
+}
+
 
 if (!function_exists('get_format_date')) {
     /**
