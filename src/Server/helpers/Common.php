@@ -496,11 +496,12 @@ if (!function_exists('throw_api_exception')) {
      * @param int $code
      * @param string $msg
      * @param string $type
+     * @param array $data
      * @throws Exception
      */
-    function throw_api_exception($code = -1, $msg = '', $type = '')
+    function throw_api_exception($code = -1, $msg = '', $type = '', $data = [])
     {
-        $errorData = generate_response_data($code, $msg, [], $type);
+        $errorData = generate_response_data($code, $msg, $data, $type);
 
         throw new \Exception(json_encode($errorData));
     }
