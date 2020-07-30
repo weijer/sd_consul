@@ -442,7 +442,7 @@ class Dao extends Model
      * @return array
      * @throws \Exception
      */
-    protected function handleQueryData($data)
+    public function handleQueryData($data)
     {
         $item = [];
         $this->data = !empty($data) ? $data : $this->data;
@@ -557,7 +557,7 @@ class Dao extends Model
      * @param $fields
      * @return $this
      */
-    protected function setFields($fields)
+    public function setFields($fields)
     {
         if (empty($fields)) {
             $setFields = "*";
